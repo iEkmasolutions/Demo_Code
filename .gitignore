@@ -1,0 +1,138 @@
+<?php
+session_start();
+include_once"incpages/check_language.php";
+//print_R($_SESSION);
+	include_once"incpages/slider.php";
+	include_once"incpages/middle.php";
+	$sel_fpro=mysql_query("select * from ".ADS." where1 order by id desc limit 0,3");
+	while($frowf=mysql_fetch_object($sel_fpro)){
+		$imgarr[]=$frowf->image;
+		$linkarr[]=$frowf->linkk;
+		$titleeng[]=$frowf->title;
+		$titlearb[]=$frowf->title_arabic;
+		$imgidarr[]=$frowf->id;
+	}
+
+?>
+<TABLE cellspacing=10 cellpadding=5  >
+			<TR>
+				<TD>
+					<A HREF="products.php?u2o4mju6kd=<?=$linkarr[0]?>" target="_blank">
+						<img src="<?=$imgarr[0]?>" width=315 height=134> 
+					
+					<!-- <div style="margin-top:-0px; font-size:20px;font-weight:100;padding-left:10px;color:#660033;">		<?=$titleeng[0]?>
+					</div> --></A>
+					</TD>
+				<TD>
+					<A HREF="products.php?u2o4mju6kd=<?=$linkarr[1]?>" target="_blank">
+						<img src="<?=$imgarr[1]?>"  width=315 height=134> 
+						<!-- <div style="margin-top:-0px; font-size:20px;font-weight:100;padding-left:10px;color:white;"> <?=$titleeng[1]?></div> -->
+					</A>
+				</TD>
+				<TD> 
+					<A HREF="products.php?u2o4mju6kd=<?=$linkarr[2]?>" target="_blank">
+						<img src="<?=$imgarr[2]?>"  width=315 height=134>
+						<!-- <div style="margin-top:-0px; font-size:20px;font-weight:100;padding-left:10px;color:white;"> <?=$titleeng[2]?></div> -->
+					</A>
+				</TD>
+			</TR>
+		</TABLE>
+		 <img src="images/<?=$feater_img?>"><BR> 
+		 <TABLE>
+		 <TR>
+			<TD>
+			<?php
+				$sel_pro=mysql_query("select * from ".PRODUCTS." where home_pro=1 limit 0,22");
+				while($prod=mysql_fetch_object($sel_pro)){
+					$size_na=mysql_fetch_object(mysql_query("select * from ".SIZE." where id=".$prod->size));
+					
+					if($_SESSION['lang']=="arabic"){
+						$pname=$prod->product_arabic;
+						$sizcost=JOD.'&nbsp;<div style="float:right;font-family:arial;">'.$prod->cost." "." : ".$size_na->arabic_name.'</div>';
+						if($prod->cost2>0){
+							$size_na2=mysql_fetch_object(mysql_query("select * from ".SIZE." where id=".$prod->size2));
+							$sizcost.=" <br> <b style='font-weight:bold;'>".JOD."&nbsp;</b><div style='float:right;font-family:arial;font-weight:bold'>".$prod->cost2."   :".$size_na2->arabic_name."</div>";
+						}
+						$align="align=right";
+						$stlna="font-size:17px;font-weight:bold;color:#DD0000;height:64px;";
+						$stlcost="font-size:15px;color:#DD0000;vertical-align:top;padding-top:13px;font-family:arial;font-weight:bold;";
+					}else{
+						$pname=$prod->product_name;	
+						$sizcost=$size_na->name." : <b style='font-weight:bold;'>".$prod->cost." JOD </b>";
+						if($prod->cost2>0){
+							$size_na2=mysql_fetch_object(mysql_query("select * from ".SIZE." where id=".$prod->size2));
+							$sizcost.=" <BR>".$size_na2->name." : <b style='font-weight:bold;'>".$prod->cost2.' JOD </b>';
+						}
+						$align="align=left";
+						$stlna="font-size:17px;color:#DD0000;height:64px;";
+						$stlcost="font-size:15px;color:#DD0000;vertical-align:top;padding-top:13px;font-family:arial;";
+					}
+			?>
+		<div id="prodv" style= "margin-top:15px;"> 
+			<A HREF="detail.php?proid=<?=$prod->product_id?>">
+				<img src="<?=$prod->product_image?>" height=220 width=250><br>
+			</A>
+			<TABLE width=100%>
+				<TR>
+					<TD colspan=2 style="<?=$stlna?>" <?=$align?>>
+						<?=$pname?> <br>
+						
+						<b style="<?=$stlcost?>">
+							<?=$sizcost?> 
+						 </b>
+					</TD>
+				</TR>
+				<!-- <TR>	
+					<TD colspan=2 style="height:15px;">
+						 
+					</TD>
+				</TR> -->
+				<TR>
+					<TD > </TD>
+					<TD align=right style="padding-top:15px;vertical-align:bottom;">
+						<A HREF="detail.php?proid=<?=$prod->product_id?>">
+							<img src="images/<?=$add_btn?>" >
+						</A>
+					</TD>
+				</TR>
+			</TABLE>
+		</div>
+		 
+		<?php
+			}
+		?>
+		
+		</TD>
+	</TR>
+	<?php
+		if($_SESSION['lang']=="arabic"){
+	?>
+	<TR>
+		<TD align=cemter style="padding-left:8px;"><BR>
+			<img src="images/free_shipping_arabic.jpg" style="width:322px;">&nbsp;&nbsp;&nbsp;&nbsp;
+			<img src="images/call_us_arabic.jpg" style="width:322px;">&nbsp;&nbsp;&nbsp;&nbsp; 
+			<img src="images/sale_arabic.jpg" style="width:322px;"><BR><BR>
+		</TD>
+	</TR>
+	<?php
+		}else{
+	?>
+	<TR>
+		<TD align=cemter style="padding-left:8px;"><BR>
+			<img src="images/free_shipping.jpg" style="width:322px;">&nbsp;&nbsp;&nbsp;&nbsp;
+			<img src="images/call_us.jpg" style="width:322px;">&nbsp;&nbsp;&nbsp;&nbsp; 
+			<img src="images/sale.jpg" style="width:322px;"><BR><BR>
+		</TD>
+	</TR>
+	<?php
+			}			
+	?>		 
+</TABLE>
+<!-- <div style="text-align:center;background:#a80405;height:300px;width:300px;color:white;">
+shipping<br><br>
+	<H1 style="font-size:30px;"><?=sale?></H1><br><br>
+	<small style="font-size:15px;"><?=resld?></small>
+</div> -->
+<?php
+	include_once"incpages/footer.php";
+?>
